@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:app_messaging/core/theme/app_theme.dart';
+import 'app.dart';
 
 void main() {
-  runApp(const MainApp());
-}
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  // Applique une seule fois le style des barres système (status bar + barre
+  // de navigation Android) au démarrage de l'app.
+  AppTheme.applySystemUiStyle();
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  runApp(const MyApp());
 }
