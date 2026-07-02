@@ -1,0 +1,103 @@
+name: Build & Release
+
+# Se déclenche quand tu pousses un tag de version (ex: v1.0.0)
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write # nécessaire pour créer une GitHub Release
+
+jobs:
+  # ---------- Vérifications de base (lint + tests) ----------
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  # ---------- Build Android ----------
+  build-android:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      # APK release non signé par un keystore custom -> signé par défaut (debug key)
+      # Pour publier sur le Play Store il faudra un vrai keystore (voir explication plus bas)
+      - run: flutter build apk --release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  # ---------- Build iOS ----------
+  build-ios:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      # --no-codesign : build sans certificat Apple (obligatoire sans compte développeur payant)
+      # Génère un .app, pas un .ipa installable sur un vrai appareil
+      - run: flutter build ios --release --no-codesign
+
+      # On zippe le .app pour pouvoir le déposer comme asset de release
+      - name: Zip .app
+        run: |
+          cd build/ios/iphoneos
+          zip -r Runner.app.zip Runner.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: build/ios/iphoneos/Runner.app.zip
+
+  # ---------- Publication sur GitHub Releases ----------
+  release:
+    needs: [build-android, build-ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ios-app
+          path: dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: |
+            dist/app-release.apk
+            dist/Runner.app.zip
+          generate_release_notes: true
