@@ -1,4 +1,4 @@
-name: Build & Release
+name: Build & Release (Frontend Flutter)
 
 # Se déclenche quand tu pousses un tag de version (ex: v1.0.0)
 on:
@@ -8,6 +8,11 @@ on:
 
 permissions:
   contents: write # nécessaire pour créer une GitHub Release
+
+# Toutes les commandes flutter s'exécutent dans le dossier frontend/
+defaults:
+  run:
+    working-directory: frontend
 
 jobs:
   # ---------- Vérifications de base (lint + tests) ----------
@@ -46,7 +51,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: frontend/build/app/outputs/flutter-apk/app-release.apk
 
   # ---------- Build iOS ----------
   build-ios:
@@ -75,12 +80,16 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ios-app
-          path: build/ios/iphoneos/Runner.app.zip
+          path: frontend/build/ios/iphoneos/Runner.app.zip
 
   # ---------- Publication sur GitHub Releases ----------
   release:
     needs: [build-android, build-ios]
     runs-on: ubuntu-latest
+    # pas de code Flutter à exécuter ici, on annule le working-directory par défaut
+    defaults:
+      run:
+        working-directory: .
     steps:
       - uses: actions/download-artifact@v4
         with:
