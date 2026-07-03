@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app_messaging/core/widgets/card_profil.dart';
+import 'package:app_messaging/presentation/widgets/card_profil.dart';
 import 'package:app_messaging/core/constants/sizes.dart';
 
 class CardMessage extends StatelessWidget {

@@ -4,10 +4,10 @@ import 'package:app_messaging/core/constants/colors.dart';
 import 'package:app_messaging/core/constants/sizes.dart';
 import 'package:app_messaging/core/enum/appbar_variant.dart';
 import 'package:app_messaging/core/enum/bottom_nav_item.dart';
-import 'package:app_messaging/core/widgets/app_bar.dart';
-import 'package:app_messaging/core/widgets/bottom_nav.dart';
-import 'package:app_messaging/core/widgets/card_message.dart';
-import 'package:app_messaging/core/widgets/input_text.dart';
+import 'package:app_messaging/presentation/widgets/app_bar.dart';
+import 'package:app_messaging/presentation/widgets/bottom_nav.dart';
+import 'package:app_messaging/presentation/widgets/card_message.dart';
+import 'package:app_messaging/presentation/widgets/input_text.dart';
 
 /// Modèle simplifié pour une conversation affichée dans la liste.
 class _ConversationItem {

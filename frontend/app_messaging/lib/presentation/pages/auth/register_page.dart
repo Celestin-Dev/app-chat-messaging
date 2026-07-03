@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_messaging/core/constants/colors.dart';
 import 'package:app_messaging/core/constants/sizes.dart';
-import 'package:app_messaging/core/widgets/input_text.dart';
-import 'package:app_messaging/core/widgets/button_primary.dart';
+import 'package:app_messaging/presentation/widgets/input_text.dart';
+import 'package:app_messaging/presentation/widgets/button_primary.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';

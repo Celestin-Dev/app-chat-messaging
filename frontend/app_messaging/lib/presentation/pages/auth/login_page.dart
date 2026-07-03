@@ -1,8 +1,9 @@
+import 'package:app_messaging/presentation/services/google_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:app_messaging/core/constants/colors.dart';
 import 'package:app_messaging/core/constants/sizes.dart';
-import 'package:app_messaging/core/widgets/input_text.dart';
-import 'package:app_messaging/core/widgets/button_primary.dart';
+import 'package:app_messaging/presentation/widgets/input_text.dart';
+import 'package:app_messaging/presentation/widgets/button_primary.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,11 +18,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GoogleAuthService _googleAuth = GoogleAuthService();
 
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.initState();
+    _googleAuth.initialize();
   }
 
   @override
@@ -45,8 +48,16 @@ class _LoginPageState extends State<LoginPage> {
     context.goNamed('register');
   }
 
-  void _onGoogleLoginPressed() {
-    // TODO: connexion via Google
+  Future<void> _onGoogleLoginPressed() async {
+    final idToken = await _googleAuth.signIn();
+
+    if (idToken == null) {
+      return;
+    }
+
+    print(idToken);
+
+    // TODO: Envoyer au backend
   }
 
   void _onFacebookLoginPressed() {

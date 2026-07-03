@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_messaging/core/enum/appbar_variant.dart';
-import 'package:app_messaging/core/widgets/card_profil.dart';
+import 'package:app_messaging/presentation/widgets/card_profil.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBarVariant variant;
