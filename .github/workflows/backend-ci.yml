@@ -15,6 +15,25 @@ jobs:
   # ---------- Garde-fou qualité : on ne déploie que si les tests passent ----------
   test:
     runs-on: ubuntu-latest
+
+    # Base PostgreSQL éphémère, disponible uniquement le temps du job,
+    # avec les mêmes identifiants que ton application.properties local
+    # (donc aucune variable à passer explicitement au step mvn test).
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: chat_app_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: selesy20
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - uses: actions/checkout@v4
 
