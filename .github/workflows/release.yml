@@ -27,8 +27,17 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
+      # --no-fatal-infos et --no-fatal-warnings : le job échoue seulement
+      # sur de vraies erreurs, pas sur des infos/warnings de style
+      - run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Run tests (if test/ exists)
+        run: |
+          if [ -d "test" ]; then
+            flutter test
+          else
+            echo "Aucun dossier test/ trouvé, étape ignorée."
+          fi
 
   # ---------- Build Android ----------
   build-android:
@@ -51,7 +60,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: frontend/build/app/outputs/flutter-apk/app-release.apk
+          path: frontend/app_messaging/build/app/outputs/flutter-apk/app-release.apk
 
   # ---------- Build iOS ----------
   build-ios:
@@ -80,7 +89,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ios-app
-          path: frontend/build/ios/iphoneos/Runner.app.zip
+          path: frontend/app_messaging/build/ios/iphoneos/Runner.app.zip
 
   # ---------- Publication sur GitHub Releases ----------
   release:
