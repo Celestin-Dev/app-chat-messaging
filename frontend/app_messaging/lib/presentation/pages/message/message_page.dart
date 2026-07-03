@@ -18,7 +18,7 @@ class _ConversationItem {
   final int unreadCount;
 
   const _ConversationItem({
-    this.imageUrl,
+    this.imageUrl = '',
     required this.name,
     required this.lastMessage,
     required this.time,
@@ -41,11 +41,13 @@ class _MessagePageState extends State<MessagePage> {
   // TODO: remplacer par la vraie liste récupérée depuis le backend
   final List<_ConversationItem> _conversations = const [
     _ConversationItem(
+      imageUrl: '',
       name: 'Jean Ricquot',
       lastMessage: 'Hello !',
       time: '14:02',
     ),
     _ConversationItem(
+      imageUrl: '',
       name: 'Jean Ricquot',
       lastMessage: 'Hello !',
       time: '14:02',
@@ -66,6 +68,30 @@ class _MessagePageState extends State<MessagePage> {
       name: 'Jean Ricquot',
       lastMessage: 'Hello !',
       time: '14:02',
+    ),
+    _ConversationItem(
+      name: 'Jhon Doe',
+      lastMessage: 'Bonjour',
+      time: 'Hier',
+      unreadCount: 2,
+    ),
+    _ConversationItem(
+      name: 'Rakotoarisoa',
+      lastMessage: 'Mbola dispo ve ilay telephone !',
+      time: '20:02',
+      unreadCount: 1,
+    ),
+    _ConversationItem(
+      name: 'Jhon Doe',
+      lastMessage: 'Bonjour',
+      time: 'Hier',
+      unreadCount: 2,
+    ),
+    _ConversationItem(
+      name: 'Jhon Doe',
+      lastMessage: 'Bonjour',
+      time: 'Hier',
+      unreadCount: 2,
     ),
     _ConversationItem(
       name: 'Jhon Doe',

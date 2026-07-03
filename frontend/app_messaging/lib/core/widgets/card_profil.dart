@@ -6,7 +6,7 @@ class CardProfil extends StatelessWidget {
   final String? imageUrl;
   final double size;
 
-  const CardProfil({super.key, this.imageUrl, this.size = 60});
+  const CardProfil({super.key, this.imageUrl = '', this.size = 60});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class CardProfil extends StatelessWidget {
           width: size,
           height: size,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _defaultAvatar(),
+          errorBuilder: (_, _, _) => _defaultAvatar(),
         ),
       );
     }
