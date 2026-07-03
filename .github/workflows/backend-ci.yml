@@ -16,12 +16,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Base PostgreSQL éphémère, disponible uniquement le temps du job,
-    # avec les mêmes identifiants que ton application.properties local
-    # (donc aucune variable à passer explicitement au step mvn test).
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: chat_app_db
           POSTGRES_USER: postgres
