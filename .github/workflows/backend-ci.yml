@@ -1,0 +1,36 @@
+name: Deploy Backend to Render
+
+# Se déclenche à chaque push sur main qui touche au backend
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/appchat/**"
+
+defaults:
+  run:
+    working-directory: backend/appchat
+
+jobs:
+  # ---------- Garde-fou qualité : on ne déploie que si les tests passent ----------
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - run: mvn test -B
+
+  # ---------- Déclenche le déploiement Render seulement si les tests passent ----------
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
