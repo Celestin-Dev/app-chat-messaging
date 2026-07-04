@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths:
       - "backend/appchat/**"
-      - ".github/workflows/backend-deploy-render.yml"
+      - ".github/workflows/backend-ci.yml"
   workflow_dispatch:
 
 defaults:
