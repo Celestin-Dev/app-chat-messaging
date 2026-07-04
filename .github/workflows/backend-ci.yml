@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths:
       - "backend/appchat/**"
-      - ".github/workflows/backend-ci.yml"
+      - ".github/workflows/backend-deploy-render.yml"
   workflow_dispatch:
 
 defaults:
@@ -18,7 +18,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Base PostgreSQL éphémère, disponible uniquement le temps du job,
+    # Base PostgreSQL éphémère, disponible uniquement le temps du job
     services:
       postgres:
         image: postgres:16
@@ -50,6 +50,9 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
     steps:
       - name: Trigger Render Deploy Hook
         run: |
