@@ -16,9 +16,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    # Base PostgreSQL éphémère, disponible uniquement le temps du job,
+    # avec les mêmes identifiants que ton application.properties local
+    # (donc aucune variable à passer explicitement au step mvn test).
     services:
       postgres:
-        image: postgres:18
+        image: postgres:16
         env:
           POSTGRES_DB: chat_app_db
           POSTGRES_USER: postgres
@@ -29,7 +32,8 @@ jobs:
           --health-cmd="pg_isready -U postgres"
           --health-interval=5s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
+          --health-start-period=10s
 
     steps:
       - uses: actions/checkout@v4
