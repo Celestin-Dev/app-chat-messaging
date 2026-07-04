@@ -1,11 +1,13 @@
 name: Deploy Backend to Render
 
-# Se déclenche à chaque push sur main qui touche au backend
+# Se déclenche à chaque push sur main qui touche au backend,
 on:
   push:
     branches: [main]
     paths:
       - "backend/appchat/**"
+      - ".github/workflows/backend-ci.yml"
+  workflow_dispatch:
 
 defaults:
   run:
@@ -17,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
 
     # Base PostgreSQL éphémère, disponible uniquement le temps du job,
-    # avec les mêmes identifiants que ton application.properties local
-    # (donc aucune variable à passer explicitement au step mvn test).
     services:
       postgres:
         image: postgres:16
