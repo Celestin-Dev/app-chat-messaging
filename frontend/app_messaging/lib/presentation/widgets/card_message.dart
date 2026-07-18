@@ -21,11 +21,11 @@ class CardMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           // Avatar
-          CardProfil(imageUrl: imageUrl, size: 50),
+          CardProfil(imageUrl: imageUrl, size: 50, isRandom: false),
 
           const SizedBox(width: 16),
 

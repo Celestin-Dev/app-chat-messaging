@@ -6,6 +6,8 @@ class RouteNames {
   static const String register = 'register';
   static const String message = 'message';
   static const String contact = 'contact';
+  static const String discussion = 'discussion';
+  static const String failed = 'connection_failed';
 }
 
 class RoutePaths {
@@ -16,4 +18,6 @@ class RoutePaths {
   static const String register = '/register';
   static const String message = '/message';
   static const String contact = '/contact';
+  static const String discussion = '/discussion';
+  static const String failed = '/connection_failed';
 }

@@ -1,12 +1,13 @@
+import 'package:app_messaging/core/services/network_service.dart';
 import 'package:app_messaging/presentation/services/google_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:app_messaging/core/constants/colors.dart';
 import 'package:app_messaging/core/constants/sizes.dart';
 import 'package:app_messaging/presentation/widgets/input_text.dart';
 import 'package:app_messaging/presentation/widgets/button_primary.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:app_messaging/presentation/services/authService.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.initState();
     _googleAuth.initialize();
   }
@@ -34,9 +35,40 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _onLoginPressed() {
-    // TODO: brancher la logique d'authentification
-    context.goNamed('message');
+  Future<void> _onLoginPressed() async {
+    final hasInternet = await NetworkService.hasInternetConnection();
+
+    if (!mounted) return;
+
+    if (!hasInternet) {
+      context.goNamed("connection_failed");
+      return;
+    }
+
+    final authService = AuthService();
+
+    try {
+      await authService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      if (!mounted) return;
+
+      context.goNamed("messages");
+    } on AuthException catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
+    } catch (_) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Une erreur inattendue est survenue.")),
+      );
+    }
   }
 
   void _onForgotPasswordPressed() {
@@ -62,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onFacebookLoginPressed() {
     // TODO: connexion via Facebook
+    context.goNamed("message");
   }
 
   @override
@@ -83,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 8),
               _buildSubtitle(),
               const SizedBox(height: 32),
-              _buildFieldLabel('Email ou numéro téléphone'),
+              _buildFieldLabel("Email ou nom d'utilisateur"),
               const SizedBox(height: 8),
               InputText(
                 label: 'example@gmail.com',

@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 class CardProfil extends StatelessWidget {
   final String? imageUrl;
   final double size;
+  final bool isRandom;
 
-  const CardProfil({super.key, this.imageUrl = '', this.size = 60});
+  const CardProfil({
+    super.key,
+    this.imageUrl = '',
+    this.size = 60,
+    this.isRandom = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,11 @@ class CardProfil extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors
-            .randomColors[Random().nextInt(AppColors.randomColors.length)],
+        color: isRandom
+            ? Colors.blueAccent
+            : AppColors.randomColors[Random().nextInt(
+                AppColors.randomColors.length,
+              )],
       ),
       child: Icon(Icons.person, color: Colors.white, size: size * 0.7),
     );

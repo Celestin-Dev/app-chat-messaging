@@ -43,7 +43,7 @@ public class User {
   private Role role;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "auth_provider", nullable = false)
+  @Column(name = "auth_provider", nullable = true)
   private AuthProvider authProvider;
 
   @Column(name = "google_id", unique = true)

@@ -51,7 +51,7 @@ public class AuthService {
         user.setRole(Role.USER);
         user.setAuthProvider(AuthProvider.LOCAL);
         user.setCreatedAt(java.time.LocalDateTime.now());
-        // user.setPhone("+261341013686");
+        //user.setPhone("+261341013246");
 
         usersRepository.save(user);
 

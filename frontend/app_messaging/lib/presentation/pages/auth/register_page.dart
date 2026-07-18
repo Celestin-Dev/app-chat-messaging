@@ -1,3 +1,5 @@
+import 'package:app_messaging/core/services/network_service.dart';
+import 'package:app_messaging/presentation/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:app_messaging/core/constants/colors.dart';
 import 'package:app_messaging/core/constants/sizes.dart';
@@ -15,8 +17,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _usernameControler = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfController = TextEditingController();
+  String _errorMessage = '';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -26,13 +32,69 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose() {
+    _usernameControler.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordConfController.dispose();
     super.dispose();
   }
 
-  void _onLoginPressed() {
-    // TODO: brancher la logique d'authentification
+  Future<void> _onRegisterPressed() async {
+    final hasInternet = await NetworkService.hasInternetConnection();
+
+    if (!mounted) return;
+
+    if (!hasInternet) {
+      context.goNamed("connection_failed");
+      return;
+    }
+
+    final authService = AuthService();
+
+    if (_usernameControler.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _passwordConfController.text.isEmpty) {
+      setState(() => _errorMessage = 'Veuillez remplir tous les champs');
+      return;
+    } else {
+      if (_passwordController.text != _passwordConfController.text) {
+        setState(() => _errorMessage = "Mot de passe non conforme !");
+        return;
+      }
+
+      setState(() {
+        _errorMessage = '';
+        _isLoading = true;
+      });
+
+      try {
+        await authService.register(
+          username: _usernameControler.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        if (!mounted) return;
+
+        context.goNamed("login");
+      } on AuthException catch (e) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message)));
+      } catch (_) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Une erreur inattendue est survenue.")),
+        );
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
+    }
   }
 
   void _onLoginAccountPressed() {
@@ -67,7 +129,21 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 8),
               _buildSubtitle(),
               const SizedBox(height: 32),
-              _buildFieldLabel('Email ou numéro téléphone'),
+              if (_errorMessage.isNotEmpty) ...[
+                _buildErrorLabel(_errorMessage),
+                const SizedBox(height: 8),
+              ],
+              const SizedBox(height: 8),
+              _buildFieldLabel("Nom d'utilisateur"),
+              const SizedBox(height: 8),
+              InputText(
+                label: 'John Doe',
+                controller: _usernameControler,
+                variant: InputTextVariant.simple,
+                isEmail: false,
+              ),
+              const SizedBox(height: 24),
+              _buildFieldLabel('Email'),
               const SizedBox(height: 8),
               InputText(
                 label: 'example@gmail.com',
@@ -88,11 +164,11 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 8),
               InputText(
                 label: 'Confirmer mot de passe',
-                controller: _passwordController,
+                controller: _passwordConfController,
                 variant: InputTextVariant.passwordHidden,
               ),
               const SizedBox(height: 24),
-              ButtonPrimary(text: 'Créer compte', onPressed: _onLoginPressed),
+              ButtonPrimary(text: "S'inscrire", onPressed: _onRegisterPressed),
               const SizedBox(height: 20),
               _buildCreateAccountRow(),
               const SizedBox(height: 28),
@@ -154,6 +230,16 @@ class _RegisterPageState extends State<RegisterPage> {
       style: const TextStyle(
         fontSize: AppSizes.textSizeMedium,
         color: AppColors.textPrimary,
+      ),
+    );
+  }
+
+  Widget _buildErrorLabel(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: AppSizes.textSizeMedium,
+        color: Colors.red,
       ),
     );
   }

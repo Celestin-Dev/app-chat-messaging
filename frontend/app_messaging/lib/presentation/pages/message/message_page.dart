@@ -8,6 +8,7 @@ import 'package:app_messaging/presentation/widgets/app_bar.dart';
 import 'package:app_messaging/presentation/widgets/bottom_nav.dart';
 import 'package:app_messaging/presentation/widgets/card_message.dart';
 import 'package:app_messaging/presentation/widgets/input_text.dart';
+import 'package:go_router/go_router.dart';
 
 /// Modèle simplifié pour une conversation affichée dans la liste.
 class _ConversationItem {
@@ -139,12 +140,16 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   void _onItemSelected(BottomNavItem item) {
-    setState(() => _currentItem = item);
-    // TODO: naviguer vers la page correspondante
+    setState(() {
+      _currentItem = item;
+    });
   }
 
   void _onConversationTap(_ConversationItem conversation) {
     // TODO: naviguer vers l'écran de discussion
+    setState(() {
+      context.pushNamed('discussion');
+    });
   }
 
   @override

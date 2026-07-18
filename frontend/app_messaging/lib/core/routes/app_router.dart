@@ -1,5 +1,7 @@
 import 'package:app_messaging/presentation/pages/auth/register_page.dart';
 import 'package:app_messaging/presentation/pages/contact/contact_page.dart';
+import 'package:app_messaging/presentation/pages/discussion/discussion_page.dart';
+import 'package:app_messaging/presentation/pages/errors/connection_error.dart';
 import 'package:app_messaging/presentation/pages/message/message_page.dart';
 import 'package:app_messaging/presentation/pages/splash_screen/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +47,20 @@ class AppRouter {
         name: RouteNames.contact,
         path: RoutePaths.contact,
         builder: (context, state) => const ContactPage(),
+      ),
+
+      //routes discussion
+      GoRoute(
+        name: RouteNames.discussion,
+        path: RoutePaths.discussion,
+        builder: (context, state) => const DiscussionPage(),
+      ),
+
+      //routes connection failed
+      GoRoute(
+        name: RouteNames.failed,
+        path: RoutePaths.failed,
+        builder: (context, state) => const ConnectionError(),
       ),
     ],
   );

@@ -1,3 +1,5 @@
+import 'package:app_messaging/core/constants/colors.dart';
+import 'package:app_messaging/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:app_messaging/core/enum/appbar_variant.dart';
 import 'package:app_messaging/presentation/widgets/card_profil.dart';
@@ -84,7 +86,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       title: Row(
         children: [
-          CardProfil(imageUrl: profileImage, size: 42),
+          CardProfil(imageUrl: profileImage, size: 42, isRandom: false),
 
           const SizedBox(width: 12),
 
@@ -95,11 +97,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-                Text(username ?? ""),
+                Text(
+                  username ?? "",
+                  style: TextStyle(
+                    fontSize: AppSizes.textSizeMedium,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-                Text(email ?? "", style: const TextStyle(fontSize: 12)),
+                Text(email ?? "", style: const TextStyle(fontSize: 10)),
 
-                Text(phone ?? "", style: const TextStyle(fontSize: 12)),
+                Text(phone ?? "", style: const TextStyle(fontSize: 10)),
               ],
             ),
           ),
@@ -107,7 +115,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
 
       actions: [
-        IconButton(onPressed: onMenu, icon: const Icon(Icons.more_vert)),
+        IconButton(
+          onPressed: onMenu,
+          icon: const Icon(Icons.more_vert, color: AppColors.backgroundColor),
+        ),
       ],
     );
   }

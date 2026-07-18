@@ -1,0 +1,1 @@
+enum MessageBubbleVariant { received, sent }

@@ -17,7 +17,6 @@ class InputText extends StatefulWidget {
   final InputTextVariant variant;
   final bool isEmail;
   final ValueChanged<String>? onChanged;
-  final VoidCallback? onCameraTap;
   final VoidCallback? onMicTap;
 
   static const double borderColorValue = 0xFF888888;
@@ -32,7 +31,6 @@ class InputText extends StatefulWidget {
     this.variant = InputTextVariant.simple,
     this.isEmail = false,
     this.onChanged,
-    this.onCameraTap,
     this.onMicTap,
   });
 
@@ -78,20 +76,13 @@ class _InputTextState extends State<InputText> {
     }
 
     if (widget.variant == InputTextVariant.voiceCamera) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            splashRadius: 18,
-            icon: const Icon(Icons.camera_alt_outlined, color: Colors.grey),
-            onPressed: widget.onCameraTap,
-          ),
-          IconButton(
-            splashRadius: 18,
-            icon: const Icon(Icons.mic_none, color: Colors.grey),
-            onPressed: widget.onMicTap,
-          ),
-        ],
+      return IconButton(
+        onPressed: widget.onMicTap,
+        icon: const Icon(Icons.mic_none),
+        splashRadius: 18,
+        constraints: const BoxConstraints(),
+        padding: EdgeInsets.zero,
+        visualDensity: VisualDensity.compact,
       );
     }
 
